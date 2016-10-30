@@ -10,6 +10,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 
 public class MenuGUI extends JFrame{
@@ -19,6 +21,7 @@ public class MenuGUI extends JFrame{
 	private final JLabel headerLabel;
 	private final JButton newRecipeButton, searchRecipeButton, viewAllRecipesButton;
 	private final JPanel northPanel, centerPanel;
+	private JPanel newRecipePanel;
 	
 	//Recipe book menu button options
 	
@@ -35,12 +38,68 @@ public class MenuGUI extends JFrame{
 		searchRecipeButton = new JButton("Search my recipes");
 		viewAllRecipesButton = new JButton("View all recipes");
 		
+		
+		//NORTH - header 
+		northPanel = new JPanel();
+		northPanel.add(headerLabel);
+		
+		//CENTER - menu
+		centerPanel = new JPanel();
+		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+		
+		//center buttons and add them to panel
+		newRecipeButton.setAlignmentX(CENTER_ALIGNMENT);
+		searchRecipeButton.setAlignmentX(CENTER_ALIGNMENT);
+		viewAllRecipesButton.setAlignmentX(CENTER_ALIGNMENT);
+		centerPanel.add(newRecipeButton);
+		centerPanel.add(searchRecipeButton);
+		centerPanel.add(viewAllRecipesButton);
+		
+		//add all content to container
+		container.add(northPanel, BorderLayout.NORTH);
+		container.add(centerPanel, BorderLayout.CENTER);
+		
+		
+		//Action Listeners for Buttons
+		
 		newRecipeButton.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				// allow user to enter new recipe
 				
+				//set up labels for new recipe
+				JLabel newRecipe = new JLabel("NEW RECIPE");
+				JLabel name = new JLabel("Enter name:");
+				JTextField nameText = new JTextField();
+				JLabel description = new JLabel("Enter description:");
+				JTextField descText = new JTextField();
+				JLabel ingredients = new JLabel("Enter ingredients:");
+				JTextArea ingrText = new JTextArea();
+				JLabel instructions = new JLabel("Enter instructions:");
+				JTextArea instrText = new JTextArea();
+				JButton addButton = new JButton("Add your recipe!");
+				
+				newRecipePanel = new JPanel();
+				newRecipePanel.setLayout(new BoxLayout(newRecipePanel, BoxLayout.Y_AXIS));
+				
+				newRecipePanel.add(newRecipe);
+				newRecipePanel.add(name);
+				newRecipePanel.add(nameText);
+				newRecipePanel.add(description);
+				newRecipePanel.add(descText);
+				newRecipePanel.add(ingredients);
+				newRecipePanel.add(ingrText);
+				newRecipePanel.add(instructions);
+				newRecipePanel.add(instrText);
+				newRecipePanel.add(addButton);
+				
+				/*
+				 * To do: Add a button actionListener that adds the recipe to the database
+				 */
+				
+				centerPanel.add(newRecipePanel);
+				revalidate(); //refresh the panel so that new content appears
 			}
 			
 		});
@@ -63,28 +122,6 @@ public class MenuGUI extends JFrame{
 			}
 			
 		});
-		
-		
-		
-		
-		//NORTH - header 
-		northPanel = new JPanel();
-		northPanel.add(headerLabel);
-		
-		//CENTER - menu
-		centerPanel = new JPanel();
-		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-		newRecipeButton.setAlignmentX(CENTER_ALIGNMENT);
-		searchRecipeButton.setAlignmentX(CENTER_ALIGNMENT);
-		viewAllRecipesButton.setAlignmentX(CENTER_ALIGNMENT);
-		centerPanel.add(newRecipeButton);
-		centerPanel.add(searchRecipeButton);
-		centerPanel.add(viewAllRecipesButton);
-		
-		//add content to container
-		container.add(northPanel, BorderLayout.NORTH);
-		container.add(centerPanel, BorderLayout.CENTER);
-		
 		
 	}
 	
