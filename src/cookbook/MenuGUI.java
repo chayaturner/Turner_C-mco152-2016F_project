@@ -42,6 +42,9 @@ public class MenuGUI extends JFrame{
 		//NORTH - header 
 		northPanel = new JPanel();
 		northPanel.add(headerLabel);
+		northPanel.add(newRecipeButton);
+		northPanel.add(searchRecipeButton);
+		northPanel.add(viewAllRecipesButton);
 		
 		//CENTER - menu
 		centerPanel = new JPanel();
@@ -51,9 +54,7 @@ public class MenuGUI extends JFrame{
 		newRecipeButton.setAlignmentX(CENTER_ALIGNMENT);
 		searchRecipeButton.setAlignmentX(CENTER_ALIGNMENT);
 		viewAllRecipesButton.setAlignmentX(CENTER_ALIGNMENT);
-		centerPanel.add(newRecipeButton);
-		centerPanel.add(searchRecipeButton);
-		centerPanel.add(viewAllRecipesButton);
+		
 		
 		//add all content to container
 		container.add(northPanel, BorderLayout.NORTH);
@@ -67,6 +68,8 @@ public class MenuGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent event) {
 				// allow user to enter new recipe
+				
+				centerPanel.removeAll();
 				
 				//set up labels for new recipe
 				JLabel newRecipe = new JLabel("NEW RECIPE");
@@ -95,11 +98,12 @@ public class MenuGUI extends JFrame{
 				newRecipePanel.add(addButton);
 				
 				/*
-				 * To do: Add a button actionListener that adds the recipe to the database
+				 * TODO: Add a button actionListener that adds the recipe to the database
 				 */
 				
 				centerPanel.add(newRecipePanel);
-				revalidate(); //refresh the panel so that new content appears
+				centerPanel.updateUI();
+				
 			}
 			
 		});
@@ -108,7 +112,22 @@ public class MenuGUI extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				// allow user to search for a specific recipe
+				
+				centerPanel.removeAll();
+				
+				JLabel searchRecipe = new JLabel("SEARCH RECIPES");
+				JLabel searchName = new JLabel("Enter name:");
+				JTextField searchNameText = new JTextField();
+				JButton searchButton = new JButton("Search for your recipe!");
+				centerPanel.add(searchRecipe);
+				centerPanel.add(searchName);
+				centerPanel.add(searchNameText);
+				centerPanel.add(searchButton);
+				
+				//TODO: add an actionListener to search database for recipe with matching name
+				
+				centerPanel.updateUI();
+				
 			}
 			
 		});
@@ -117,8 +136,13 @@ public class MenuGUI extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
-				// allow user to view all current recipes
+				// TODO: List all recipes found in database by name. 
 				
+				centerPanel.removeAll();
+				JLabel allRecipes = new JLabel("ALL MY RECIPES:");
+				centerPanel.add(allRecipes);
+				centerPanel.updateUI();
+			
 			}
 			
 		});
