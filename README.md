@@ -8,3 +8,7 @@ We will possibly help calculate the health benefits/calories of the recipes that
 
 As we continue, we will add more features based on things we learn. 
 
+
+Update. 
+For creating a database I used an utility "SQLite Administrator". I could use a console but I found it easier. http://sqliteadmin.orbmu2k.de/
+
