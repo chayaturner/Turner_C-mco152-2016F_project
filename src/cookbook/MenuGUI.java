@@ -78,9 +78,9 @@ public class MenuGUI extends JFrame{
 				JLabel description = new JLabel("Enter description:");
 				JTextField descText = new JTextField();
 				JLabel ingredients = new JLabel("Enter ingredients:");
-				JTextArea ingrText = new JTextArea();
+				JTextField ingrText = new JTextField();
 				JLabel instructions = new JLabel("Enter instructions:");
-				JTextArea instrText = new JTextArea();
+				JTextField instrText = new JTextField();
 				JButton addButton = new JButton("Add your recipe!");
 				
 				newRecipePanel = new JPanel();
@@ -108,6 +108,7 @@ public class MenuGUI extends JFrame{
 			
 		});
 		
+		//SEARCH RECIPE BUTTON
 		searchRecipeButton.addActionListener(new ActionListener(){
 
 			@Override
@@ -119,6 +120,19 @@ public class MenuGUI extends JFrame{
 				JLabel searchName = new JLabel("Enter name:");
 				JTextField searchNameText = new JTextField();
 				JButton searchButton = new JButton("Search for your recipe!");
+				
+				searchButton.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						centerPanel.removeAll();
+						JLabel recipeSearchResults = new JLabel("Results for: " + searchNameText.getText());
+						centerPanel.add(recipeSearchResults);
+						centerPanel.updateUI();
+					}
+					
+				});
+				
 				centerPanel.add(searchRecipe);
 				centerPanel.add(searchName);
 				centerPanel.add(searchNameText);
