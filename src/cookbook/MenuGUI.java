@@ -1,11 +1,14 @@
 package cookbook;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,9 +22,16 @@ public class MenuGUI extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	private final JLabel headerLabel;
+
+	private JLabel westLabel;
+
+	private final JLabel eastLabel;
 	private final JButton newRecipeButton, searchRecipeButton, viewAllRecipesButton;
-	private final JPanel northPanel, centerPanel;
+	private final JPanel northPanel, centerPanel, westPanel, eastPanel;
 	private JPanel newRecipePanel;
+	private Color darkColor;
+	private Color mediumColor;
+	private Color lightColor;
 	
 	//Recipe book menu button options
 	
@@ -33,14 +43,48 @@ public class MenuGUI extends JFrame{
 		final Container container = getContentPane();
 		container.setLayout(new BorderLayout());
 		
-		headerLabel = new JLabel("MY RECIPE BOOK");
-		newRecipeButton = new JButton("Add new recipe");
-		searchRecipeButton = new JButton("Search my recipes");
-		viewAllRecipesButton = new JButton("View all recipes");
+		lightColor = new Color(230, 255, 249);
+		mediumColor = new Color(0, 204, 153);
+		darkColor = new Color(0, 102, 77);
 		
+		headerLabel = new JLabel("MY RECIPE BOOK   ");
+		headerLabel.setForeground(darkColor);
+		headerLabel.setFont(new Font("Jokerman", Font.ITALIC, 30));
+		newRecipeButton = new JButton("Add new recipe");
+		newRecipeButton.setBackground(darkColor);
+		newRecipeButton.setForeground(lightColor);
+		newRecipeButton.setFont(new Font("Serif", Font.BOLD, 15));
+		searchRecipeButton = new JButton("Search my recipes");
+		searchRecipeButton.setBackground(darkColor);
+		searchRecipeButton.setForeground(lightColor);
+		searchRecipeButton.setFont(new Font("Serif", Font.BOLD, 15));
+		viewAllRecipesButton = new JButton("View all recipes");
+		viewAllRecipesButton.setBackground(darkColor);
+		viewAllRecipesButton.setForeground(lightColor);
+		viewAllRecipesButton.setFont(new Font("Serif", Font.BOLD, 15));
+
+		//WEST - picture
+		westPanel = new JPanel();
+		westPanel.setBackground(lightColor);
+		westLabel = new JLabel("");
+		westLabel.setBackground(lightColor);
+		westLabel.setForeground(darkColor);
+		westLabel.setFont(new Font("Serif", Font.BOLD, 20));
+		westPanel.add(westLabel);
+		container.add(westPanel, BorderLayout.WEST);
+		
+		//EAST - space
+		eastPanel = new JPanel();
+		eastPanel.setBackground(lightColor);
+		eastLabel = new JLabel("");
+		eastLabel.setBackground(lightColor);
+		eastLabel.setForeground(darkColor);
+		eastPanel.add(eastLabel);
+		container.add(eastPanel, BorderLayout.EAST);
 		
 		//NORTH - header 
 		northPanel = new JPanel();
+		northPanel.setBackground(lightColor);
 		northPanel.add(headerLabel);
 		northPanel.add(newRecipeButton);
 		northPanel.add(searchRecipeButton);
@@ -49,12 +93,7 @@ public class MenuGUI extends JFrame{
 		//CENTER - menu
 		centerPanel = new JPanel();
 		centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-		
-		//center buttons and add them to panel
-		newRecipeButton.setAlignmentX(CENTER_ALIGNMENT);
-		searchRecipeButton.setAlignmentX(CENTER_ALIGNMENT);
-		viewAllRecipesButton.setAlignmentX(CENTER_ALIGNMENT);
-		
+		centerPanel.setBackground(lightColor);
 		
 		//add all content to container
 		container.add(northPanel, BorderLayout.NORTH);
@@ -73,6 +112,16 @@ public class MenuGUI extends JFrame{
 				
 				//set up labels for new recipe
 				JLabel newRecipe = new JLabel("NEW RECIPE");
+				newRecipe.setFont(new Font("Serif", Font.BOLD, 20));
+				
+				//TODO: Perhaps add photo background:
+				/*
+				westLabel = new JLabel("NEW RECIPE");
+				westLabel.setFont(new Font("Serif", Font.BOLD, 20));
+				westPanel.add(westLabel);
+				westPanel.updateUI();
+				*/
+				
 				JLabel name = new JLabel("Enter name:");
 				JTextField nameText = new JTextField();
 				JLabel description = new JLabel("Enter description:");
@@ -82,10 +131,13 @@ public class MenuGUI extends JFrame{
 				JLabel instructions = new JLabel("Enter instructions:");
 				JTextField instrText = new JTextField();
 				JButton addButton = new JButton("Add your recipe!");
+				addButton.setBackground(darkColor);
+				addButton.setForeground(lightColor);
+				addButton.setFont(new Font("Serif", Font.BOLD, 15));
 				
 				newRecipePanel = new JPanel();
 				newRecipePanel.setLayout(new BoxLayout(newRecipePanel, BoxLayout.Y_AXIS));
-				
+				newRecipePanel.setBackground(lightColor);
 				newRecipePanel.add(newRecipe);
 				newRecipePanel.add(name);
 				newRecipePanel.add(nameText);
@@ -102,7 +154,7 @@ public class MenuGUI extends JFrame{
 				 */
 				
 				centerPanel.add(newRecipePanel);
-				centerPanel.updateUI();
+				centerPanel.updateUI(); //update gui with new results
 				
 			}
 			
@@ -117,9 +169,13 @@ public class MenuGUI extends JFrame{
 				centerPanel.removeAll();
 				
 				JLabel searchRecipe = new JLabel("SEARCH RECIPES");
+				searchRecipe.setFont(new Font("Serif", Font.BOLD, 20));
 				JLabel searchName = new JLabel("Enter name:");
 				JTextField searchNameText = new JTextField();
 				JButton searchButton = new JButton("Search for your recipe!");
+				searchButton.setBackground(darkColor);
+				searchButton.setForeground(lightColor);
+				searchButton.setFont(new Font("Serif", Font.BOLD, 15));
 				
 				searchButton.addActionListener(new ActionListener(){
 
@@ -128,7 +184,7 @@ public class MenuGUI extends JFrame{
 						centerPanel.removeAll();
 						JLabel recipeSearchResults = new JLabel("Results for: " + searchNameText.getText());
 						centerPanel.add(recipeSearchResults);
-						centerPanel.updateUI();
+						centerPanel.updateUI(); //update the gui with new results
 					}
 					
 				});
@@ -153,7 +209,8 @@ public class MenuGUI extends JFrame{
 				// TODO: List all recipes found in database by name. 
 				
 				centerPanel.removeAll();
-				JLabel allRecipes = new JLabel("ALL MY RECIPES:");
+				JLabel allRecipes = new JLabel("ALL MY RECIPES");
+				allRecipes.setFont(new Font("Serif", Font.BOLD, 20));
 				centerPanel.add(allRecipes);
 				centerPanel.updateUI();
 			
