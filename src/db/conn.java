@@ -15,7 +15,7 @@ public class conn {
 	public static void Conn() throws ClassNotFoundException, SQLException {
 		connect = null;
 		Class.forName("org.sqlite.JDBC");
-		connect = DriverManager.getConnection("jdbc:sqlite:cooking db.s3db");
+		connect = DriverManager.getConnection("jdbc:sqlite:cooking db.s3db"); //connection to our database
 
 		System.out.println("The Base is connected");
 	}
@@ -27,7 +27,7 @@ public class conn {
 
 		state.execute(// Выполняет заданную инструкцию SQL, которая может
 						// возвращать несколько результатов.
-				"CREATE TABLE if not exists 'users' ('id' INTEGER PRIMARY KEY AUTOINCREMENT, 'name' text, 'ingridients' text);");
+				"CREATE TABLE if not exists 'menu' ('id' INTEGER PRIMARY KEY AUTOINCREMENT, 'name' text, 'description' text, 'ingridients' text, 'instructions' text );");
 
 		System.out.println("The table is created");
 	}
@@ -36,16 +36,16 @@ public class conn {
 	public static void WriteDB() throws SQLException {
 
 		state.execute(
-				"INSERT INTO 'users' ('name', 'ingridients') VALUES ('Salad', 'Помидор, огурец, лук, масло, соль'); ");
-		state.execute("INSERT INTO 'users' ('name', 'ingridients') VALUES ('Falafel', 'Бобы, масло, петрушка'); ");
-		state.execute("INSERT INTO 'users' ('name', 'ingridients') VALUES ('Humus', 'Нут, тхина, лимон, масло'); ");
+				"INSERT INTO 'menu' ('name', 'ingridients') VALUES ('Salad', 'Помидор, огурец, лук, масло, соль'); ");
+		state.execute("INSERT INTO 'menu' ('name', 'ingridients') VALUES ('Falafel', 'Бобы, масло, петрушка'); ");
+		state.execute("INSERT INTO 'menu' ('name', 'ingridients') VALUES ('Humus', 'Нут, тхина, лимон, масло'); ");
 
 		System.out.println("The table is filled");
 	}
 
 	// Table output
 	public static void ReadDB() throws ClassNotFoundException, SQLException {
-		resSet = state.executeQuery("SELECT * FROM users");
+		resSet = state.executeQuery("SELECT * FROM menu");
 
 		while (resSet.next()) {
 			int id = resSet.getInt("id");
