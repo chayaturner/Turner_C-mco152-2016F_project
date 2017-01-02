@@ -4,9 +4,9 @@ public class db {
 
 	public static void main(String[] args)  throws ClassNotFoundException, SQLException{
 		// TODO Auto-generated method stub
-		conn.Conn();
+		Conn conn = new Conn();
 		conn.CreateDB();
-		conn.WriteDB();
+		conn.WriteDB("INSERT INTO 'menu' ('name', 'ingridients') VALUES ('Salad', 'Помидор, огурец, лук, масло, соль'); ");
 		conn.ReadDB();
 		conn.CloseDB();
 	}

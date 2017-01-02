@@ -6,13 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class conn {
-	public static Connection connect;
-	public static Statement state;
-	public static ResultSet resSet;
+public class Conn {
+	public Connection connect;
+	public Statement state;
+	public ResultSet resSet;
 
 	// Connecting to database
-	public static void Conn() throws ClassNotFoundException, SQLException {
+	public Conn() throws ClassNotFoundException, SQLException {
 		connect = null;
 		Class.forName("org.sqlite.JDBC");
 		connect = DriverManager.getConnection("jdbc:sqlite:cooking db.s3db"); //connection to our database
@@ -21,7 +21,7 @@ public class conn {
 	}
 
 	// -Creating a table
-	public static void CreateDB() throws ClassNotFoundException, SQLException {
+	public void CreateDB() throws ClassNotFoundException, SQLException {
 		state = connect.createStatement();// creates the object sending sql
 										// statement to the database
 
@@ -33,18 +33,22 @@ public class conn {
 	}
 
 	// Filling up the table
-	public static void WriteDB() throws SQLException {
+	public void WriteDB(String query) throws SQLException {
 
-		state.execute(
-				"INSERT INTO 'menu' ('name', 'ingridients') VALUES ('Salad', 'Помидор, огурец, лук, масло, соль'); ");
-		state.execute("INSERT INTO 'menu' ('name', 'ingridients') VALUES ('Falafel', 'Бобы, масло, петрушка'); ");
-		state.execute("INSERT INTO 'menu' ('name', 'ingridients') VALUES ('Humus', 'Нут, тхина, лимон, масло'); ");
-
-		System.out.println("The table is filled");
+		//state.execute(
+		//		"INSERT INTO 'menu' ('name', 'ingridients') VALUES ('Salad', 'Помидор, огурец, лук, масло, соль'); ");
+		//state.execute("INSERT INTO 'menu' ('name', 'ingridients') VALUES ('Falafel', 'Бобы, масло, петрушка'); ");
+		//state.execute("INSERT INTO 'menu' ('name', 'ingridients') VALUES ('Humus', 'Нут, тхина, лимон, масло'); ");
+		
+		state = connect.createStatement();
+		
+		state.execute(query);
+		
+		System.out.println("Successful write to database");
 	}
 
 	// Table output
-	public static void ReadDB() throws ClassNotFoundException, SQLException {
+	public void ReadDB() throws ClassNotFoundException, SQLException {
 		resSet = state.executeQuery("SELECT * FROM menu");
 
 		while (resSet.next()) {
@@ -61,7 +65,7 @@ public class conn {
 	}
 
 	// Close
-	public static void CloseDB() throws ClassNotFoundException, SQLException {
+	public void CloseDB() throws ClassNotFoundException, SQLException {
 
 		connect.close();
 		state.close();

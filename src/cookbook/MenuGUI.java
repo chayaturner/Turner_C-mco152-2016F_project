@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -15,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import db.Conn;
 
 
 public class MenuGUI extends JFrame{
@@ -28,10 +31,14 @@ public class MenuGUI extends JFrame{
 	private final JLabel eastLabel;
 	private final JButton newRecipeButton, searchRecipeButton, viewAllRecipesButton;
 	private final JPanel northPanel, centerPanel, westPanel, eastPanel;
+	private JTextField nameText, descText, ingrText, instrText;
 	private JPanel newRecipePanel;
 	private Color darkColor;
 	private Color mediumColor;
 	private Color lightColor;
+	
+	//Database connection
+	Conn connection;
 	
 	//Recipe book menu button options
 	
@@ -99,7 +106,6 @@ public class MenuGUI extends JFrame{
 		container.add(northPanel, BorderLayout.NORTH);
 		container.add(centerPanel, BorderLayout.CENTER);
 		
-		
 		//Action Listeners for Buttons
 		
 		newRecipeButton.addActionListener(new ActionListener(){
@@ -123,13 +129,13 @@ public class MenuGUI extends JFrame{
 				*/
 				
 				JLabel name = new JLabel("Enter name:");
-				JTextField nameText = new JTextField();
+				nameText = new JTextField();
 				JLabel description = new JLabel("Enter description:");
-				JTextField descText = new JTextField();
+				descText = new JTextField();
 				JLabel ingredients = new JLabel("Enter ingredients:");
-				JTextField ingrText = new JTextField();
+				ingrText = new JTextField();
 				JLabel instructions = new JLabel("Enter instructions:");
-				JTextField instrText = new JTextField();
+				instrText = new JTextField();
 				JButton addButton = new JButton("Add your recipe!");
 				addButton.setBackground(darkColor);
 				addButton.setForeground(lightColor);
@@ -152,6 +158,60 @@ public class MenuGUI extends JFrame{
 				/*
 				 * TODO: Add a button actionListener that adds the recipe to the database
 				 */
+				
+				addButton.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						//connect to database
+						try {
+							connection = new Conn();
+						} catch (ClassNotFoundException | SQLException e) {
+							JLabel error = new JLabel("Error connecting to database");
+							newRecipePanel.add(error);
+							centerPanel.add(newRecipePanel);
+							centerPanel.updateUI();
+						}
+						
+						//use user input to write to db
+						String name = nameText.getText();
+						String description = descText.getText();
+						String ingredients = ingrText.getText();
+						String instructions = instrText.getText();
+						
+				
+						String query = "INSERT INTO 'menu' ('name', 'description', 'ingridients', 'instructions') "
+								+ "VALUES ('"
+								+ name
+								+ "', '"
+								+ description
+								+ "', '"
+								+ ingredients
+								+ "', '"
+								+ instructions
+								+ "'); ";
+						
+						try {
+							connection.WriteDB(query);
+						} catch (SQLException | NullPointerException ex) {
+							JLabel error = new JLabel("Error writing to database.");
+							newRecipePanel.add(error);
+							centerPanel.add(newRecipePanel);
+							centerPanel.updateUI();
+						}
+						
+						//close db connection
+						try {
+							connection.CloseDB();
+						} catch (ClassNotFoundException | SQLException | NullPointerException e) {
+							JLabel error = new JLabel("Error closing database.");
+							newRecipePanel.add(error);
+							centerPanel.add(newRecipePanel);
+							centerPanel.updateUI();
+						}
+					}
+					
+				});
 				
 				centerPanel.add(newRecipePanel);
 				centerPanel.updateUI(); //update gui with new results
@@ -213,6 +273,15 @@ public class MenuGUI extends JFrame{
 				allRecipes.setFont(new Font("Serif", Font.BOLD, 20));
 				centerPanel.add(allRecipes);
 				centerPanel.updateUI();
+				
+				//connect to database to retrieve all recipes
+				try {
+					connection.ReadDB();
+				} catch (ClassNotFoundException | SQLException | NullPointerException ex) {
+					JLabel error = new JLabel("Error retreiving recipes from database");
+					centerPanel.add(error);
+					centerPanel.updateUI();
+				}
 			
 			}
 			
