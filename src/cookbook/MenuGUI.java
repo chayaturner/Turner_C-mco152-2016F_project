@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.BoxLayout;
@@ -31,7 +32,7 @@ public class MenuGUI extends JFrame{
 	private final JLabel eastLabel;
 	private final JButton newRecipeButton, searchRecipeButton, viewAllRecipesButton;
 	private final JPanel northPanel, centerPanel, westPanel, eastPanel;
-	private JTextField nameText, descText, ingrText, instrText;
+	private JTextField nameText, descText, ingrText, instrText, searchNameText;
 	private JPanel newRecipePanel;
 	private Color darkColor;
 	private Color mediumColor;
@@ -231,7 +232,7 @@ public class MenuGUI extends JFrame{
 				JLabel searchRecipe = new JLabel("SEARCH RECIPES");
 				searchRecipe.setFont(new Font("Serif", Font.BOLD, 20));
 				JLabel searchName = new JLabel("Enter name:");
-				JTextField searchNameText = new JTextField();
+				searchNameText = new JTextField();
 				JButton searchButton = new JButton("Search for your recipe!");
 				searchButton.setBackground(darkColor);
 				searchButton.setForeground(lightColor);
@@ -245,6 +246,47 @@ public class MenuGUI extends JFrame{
 						JLabel recipeSearchResults = new JLabel("Results for: " + searchNameText.getText());
 						centerPanel.add(recipeSearchResults);
 						centerPanel.updateUI(); //update the gui with new results
+						
+						/*
+						 * The ResultSet interface provides getter methods (getBoolean, getLong, and so on) 
+						 * for retrieving column values from the current row. Values can be retrieved using 
+						 * either the index number of the column or the name of the column. In general, using
+						 *  the column index will be more efficient. Columns are numbered from 1. For maximum
+						 *   portability, result set columns within each row should be read in left-to-right 
+						 *   order, and each column should be read only once. 
+						 *  For the getter methods, a JDBC driver attempts to convert the underlying data to
+						 *   the Java type specified in the getter method and returns a suitable Java value.
+						 *    The JDBC specification has a table showing the allowable mappings from SQL types
+						 *     to Java types that can be used by the ResultSet getter methods. 
+						 *     Column names used as input to getter methods are case insensitive. When a getter 
+						 *     method is called with a column name and several columns have the same name, the 
+						 *     value of the first matching column will be returned. The column name option is 
+						 *     designed to be used when column names are used in the SQL query that generated 
+						 *     the result set. For columns that are NOT explicitly named in the query, it is best
+						 *      to use column numbers. If column names are used, the programmer should take care
+						 *       to guarantee that they uniquely refer to the intended columns, which can be 
+						 *       assured with the SQL AS clause. 
+						 */
+						
+						//TODO: verify functionality:
+						try {
+							ResultSet results = connection.SearchDB(searchNameText.getText());
+							while(results.next()){
+								String name = results.getString("name");
+								String description = results.getString("description");
+								String ingredients = results.getString("ingridients"); //misspelled in db
+								String instruction = results.getString("instructions");
+								JLabel searchResultName = new JLabel(name);
+								recipeSearchResults.add(searchResultName);
+								centerPanel.add(recipeSearchResults);
+								centerPanel.updateUI();
+							}
+						} catch (ClassNotFoundException | SQLException | NullPointerException ex) {
+							JLabel error = new JLabel("Error retreiving from database");
+							recipeSearchResults.add(error);
+							centerPanel.add(recipeSearchResults);
+							centerPanel.updateUI();
+						}
 					}
 					
 				});
@@ -266,8 +308,9 @@ public class MenuGUI extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent event) {
+
 				// TODO: List all recipes found in database by name. 
-				
+
 				centerPanel.removeAll();
 				JLabel allRecipes = new JLabel("ALL MY RECIPES");
 				allRecipes.setFont(new Font("Serif", Font.BOLD, 20));

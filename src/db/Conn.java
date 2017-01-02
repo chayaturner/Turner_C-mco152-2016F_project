@@ -63,6 +63,12 @@ public class Conn {
 
 		System.out.println("The table is shown");
 	}
+	
+	//Search database - returns a ResultSet of the data from the database to the Gui. 
+	public ResultSet SearchDB(String searchName) throws ClassNotFoundException, SQLException{
+		resSet = state.executeQuery("SELECT * FROM menu WHERE name = '" + searchName +"'");
+		return resSet;
+	}
 
 	// Close
 	public void CloseDB() throws ClassNotFoundException, SQLException {
