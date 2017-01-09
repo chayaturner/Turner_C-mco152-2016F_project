@@ -11,7 +11,7 @@ public class DBConnection {
 		try{
 			Class.forName("org.sqlite.JDBC");
 			Connection con = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\CMT\\Desktop\\Touro\\Workspace\\Turner_C-mco152-2016F_project\\src\\db\\RecipesDB.sqlite");
-			JOptionPane.showMessageDialog(null,  "Successful Connection");
+			//JOptionPane.showMessageDialog(null,  "Successful Connection");
 			return con;
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null, ex);
@@ -50,9 +50,7 @@ public class DBConnection {
 		con = dbConnect();
 		
 		//code for inside button click to insert into database:
-		//put in try catch in case it errors
 		try{
-			
 			String query = "insert into Recipe (Name,Description,Ingredients,Instructions) values (?,?,?,?)";
 			PreparedStatement statement = con.prepareStatement(query);
 			
@@ -62,7 +60,7 @@ public class DBConnection {
 			statement.setString(4, instr);
 			statement.execute();
 			
-			JOptionPane.showMessageDialog(null, "Inserted Data");
+			//JOptionPane.showMessageDialog(null, "Inserted Data");
 			
 			//close connection to database:
 			statement.close();
@@ -75,24 +73,19 @@ public class DBConnection {
 	public ResultSet getAll(){
 		con = dbConnect();
 		ResultSet results = null;
-		ResultSet allRecipes = null;
+		
 	//code for button click to retrieve all recipes in db:
 		try{
 			String query = "select * from recipe";
 			PreparedStatement statement = con.prepareStatement(query);
 			results = statement.executeQuery();
 			
-			JOptionPane.showMessageDialog(null, "All Recipes");
-			allRecipes = results;
-			
-			//close connection
-			//statement.close();
+			//statement.close(); 
 			
 		} catch (Exception ex){
 			JOptionPane.showMessageDialog(null, ex);
 		}
 		
-		return allRecipes;
-		
+		return results;		
 	}
 }

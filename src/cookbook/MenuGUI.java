@@ -7,10 +7,8 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -18,11 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.table.TableModel;
 
-import db.Conn;
 import db.DBConnection;
 import net.proteanit.sql.DbUtils;
 
@@ -61,7 +56,7 @@ public class MenuGUI extends JFrame{
 		connection = new DBConnection();
 		 
 		lightColor = new Color(230, 255, 249);
-		mediumColor = new Color(0, 204, 153);
+		mediumColor = new Color(130, 237, 187);
 		darkColor = new Color(0, 102, 77);
 		
 		headerLabel = new JLabel("MY RECIPE BOOK   ");
@@ -80,7 +75,7 @@ public class MenuGUI extends JFrame{
 		viewAllRecipesButton.setForeground(lightColor);
 		viewAllRecipesButton.setFont(new Font("Serif", Font.BOLD, 15));
 
-		//WEST - picture
+		//WEST - space
 		westPanel = new JPanel();
 		westPanel.setBackground(lightColor);
 		westLabel = new JLabel("");
@@ -156,79 +151,19 @@ public class MenuGUI extends JFrame{
 				newRecipePanel.add(instructions);
 				newRecipePanel.add(instrText);
 				newRecipePanel.add(addButton);
-				
-				/*
-				 * TODO: Add a button actionListener that adds the recipe to the database
-				 */
-				
+
 				addButton.addActionListener(new ActionListener(){
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						//connect to database
-						connection.insertDB(nameText.getText(), descText.getText(), ingrText.getText(), instrText.getText());
-						
-						/*
-						try {
-							connection = new Conn();
-						} catch (ClassNotFoundException | SQLException e) {
-							JLabel error = new JLabel("Error connecting to database");
-							newRecipePanel.add(error);
-							centerPanel.add(newRecipePanel);
-							centerPanel.updateUI();
-						}
-		
-						
-						//use user input to write to db
-						String name = nameText.getText();
-						String description = descText.getText();
-						String ingredients = ingrText.getText();
-						String instructions = instrText.getText();
-						
-				
-						String query = "INSERT INTO 'menu' ('name', 'description', 'ingridients', 'instructions') "
-								+ "VALUES ('"
-								+ name
-								+ "', '"
-								+ description
-								+ "', '"
-								+ ingredients
-								+ "', '"
-								+ instructions
-								+ "'); ";
-						
-						try {
-							connection.WriteDB(query);
-						} catch (SQLException | NullPointerException ex) {
-							JLabel error = new JLabel("Error writing to database.");
-							newRecipePanel.add(error);
-							centerPanel.add(newRecipePanel);
-							centerPanel.updateUI();
-						}
-						
-						//close db connection
-						try {
-							connection.CloseDB();
-						} catch (ClassNotFoundException | SQLException | NullPointerException e) {
-							JLabel error = new JLabel("Error closing database.");
-							newRecipePanel.add(error);
-							centerPanel.add(newRecipePanel);
-							centerPanel.updateUI();
-						}
-						*/
-						
-						
-					}
-					
+						connection.insertDB(nameText.getText(), descText.getText(), ingrText.getText(), instrText.getText());						
+					}					
 				});
 				
-				
-				
 				centerPanel.add(newRecipePanel);
-				centerPanel.updateUI(); //update gui with new results
-				
-			}
-			
+				centerPanel.updateUI(); //update gui with new results				
+			}			
 		});
 		
 		//SEARCH RECIPE BUTTON
@@ -258,8 +193,9 @@ public class MenuGUI extends JFrame{
 
 						//create scrollable table to populate with search results
 						JTable table = new JTable();
+						table.setBackground(mediumColor);
 						JScrollPane scrollPane = new JScrollPane();
-						scrollPane.setBounds(0, 0, 0, 0);
+						scrollPane.getViewport().setBackground(mediumColor);
 						scrollPane.setViewportView(table);
 						
 						//get all resulting recipes from db and populate table
@@ -274,19 +210,15 @@ public class MenuGUI extends JFrame{
 						centerPanel.add(scrollPane);
 						
 						centerPanel.updateUI(); //update the gui with new results
-					}
-					
-				});
-						
+					}					
+				});						
 					
 				centerPanel.add(searchRecipe);
 				centerPanel.add(searchName);
 				centerPanel.add(searchNameText);
 				centerPanel.add(searchButton);
-				centerPanel.updateUI();
-				
-			}
-			
+				centerPanel.updateUI();				
+			}			
 		});
 		
 		viewAllRecipesButton.addActionListener(new ActionListener(){
@@ -294,16 +226,15 @@ public class MenuGUI extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent event) {
 
-				// TODO: List all recipes found in database by name. 
-
 				centerPanel.removeAll();
 				JLabel allRecipes = new JLabel("ALL MY RECIPES");
 				allRecipes.setFont(new Font("Serif", Font.BOLD, 20));
 				
 				//scrollable table to hold all recipes
 				JTable table = new JTable();
+				table.setBackground(mediumColor);
 				JScrollPane scrollPane = new JScrollPane();
-				scrollPane.setBounds(0, 0, 0, 0);
+				scrollPane.getViewport().setBackground(mediumColor);
 				scrollPane.setViewportView(table);
 				
 				centerPanel.add(allRecipes);
@@ -319,27 +250,8 @@ public class MenuGUI extends JFrame{
 				}
 				
 				centerPanel.updateUI();
-				
-				//connect to database to retrieve all recipes
-				
-				/*
-				try {
-					connection.ReadDB();
-				} catch (ClassNotFoundException | SQLException | NullPointerException ex) {
-					JLabel error = new JLabel("Error retreiving recipes from database");
-					centerPanel.add(error);
-					centerPanel.updateUI();
-				}
-				*/
-				
-				
-				
-				
-			
-			}
-			
+			}			
 		});
 		
 	}
-}
-		
+}	
