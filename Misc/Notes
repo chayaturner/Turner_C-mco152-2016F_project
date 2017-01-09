@@ -1,0 +1,16 @@
+Use FireFox SQLite Manager to create, query, and view database. 
+Code connects to database, queries on it, and closes. 
+
+Add jars to project path (in Resources folder).
+can be found at:
+https://bitbucket.org/xerial/sqlite-jdbc/downloads
+
+Syntax for connecting to db:
+Connection con = DriverManager.getConnection("jdbc:sqlite:DBPath...");
+
+Syntax for SQL insert queries:
+
+INSERT INTO RECIPE (Name,Description,Ingredients,Instructions) VALUES (?,?,?,?);
+
+
+		

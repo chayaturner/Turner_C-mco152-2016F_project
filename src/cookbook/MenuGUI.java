@@ -19,6 +19,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import db.Conn;
+import db.DBConnection;
 
 
 public class MenuGUI extends JFrame{
@@ -26,9 +27,7 @@ public class MenuGUI extends JFrame{
 	private static final long serialVersionUID = 1L;
 	
 	private final JLabel headerLabel;
-
 	private JLabel westLabel;
-
 	private final JLabel eastLabel;
 	private final JButton newRecipeButton, searchRecipeButton, viewAllRecipesButton;
 	private final JPanel northPanel, centerPanel, westPanel, eastPanel;
@@ -39,7 +38,8 @@ public class MenuGUI extends JFrame{
 	private Color lightColor;
 	
 	//Database connection
-	Conn connection;
+	//Conn connection;
+	DBConnection connection;
 	
 	//Recipe book menu button options
 	
@@ -51,6 +51,9 @@ public class MenuGUI extends JFrame{
 		final Container container = getContentPane();
 		container.setLayout(new BorderLayout());
 		
+		//set database:
+		connection = new DBConnection();
+		 
 		lightColor = new Color(230, 255, 249);
 		mediumColor = new Color(0, 204, 153);
 		darkColor = new Color(0, 102, 77);
@@ -165,6 +168,9 @@ public class MenuGUI extends JFrame{
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						//connect to database
+						connection.insertDB(nameText.getText(), descText.getText(), ingrText.getText(), instrText.getText());
+						
+						/*
 						try {
 							connection = new Conn();
 						} catch (ClassNotFoundException | SQLException e) {
@@ -173,6 +179,7 @@ public class MenuGUI extends JFrame{
 							centerPanel.add(newRecipePanel);
 							centerPanel.updateUI();
 						}
+		
 						
 						//use user input to write to db
 						String name = nameText.getText();
@@ -210,9 +217,14 @@ public class MenuGUI extends JFrame{
 							centerPanel.add(newRecipePanel);
 							centerPanel.updateUI();
 						}
+						*/
+						
+						
 					}
 					
 				});
+				
+				
 				
 				centerPanel.add(newRecipePanel);
 				centerPanel.updateUI(); //update gui with new results
@@ -245,6 +257,10 @@ public class MenuGUI extends JFrame{
 						centerPanel.removeAll();
 						JLabel recipeSearchResults = new JLabel("Results for: " + searchNameText.getText());
 						centerPanel.add(recipeSearchResults);
+						
+						//search db:
+						connection.searchDB(searchNameText.getText());
+						
 						centerPanel.updateUI(); //update the gui with new results
 						
 						/*
@@ -268,6 +284,7 @@ public class MenuGUI extends JFrame{
 						 *       assured with the SQL AS clause. 
 						 */
 						
+						/*
 						//TODO: verify functionality:
 						try {
 							ResultSet results = connection.SearchDB(searchNameText.getText());
@@ -287,6 +304,8 @@ public class MenuGUI extends JFrame{
 							centerPanel.add(recipeSearchResults);
 							centerPanel.updateUI();
 						}
+						
+						*/
 					}
 					
 				});
@@ -318,6 +337,8 @@ public class MenuGUI extends JFrame{
 				centerPanel.updateUI();
 				
 				//connect to database to retrieve all recipes
+				
+				/*
 				try {
 					connection.ReadDB();
 				} catch (ClassNotFoundException | SQLException | NullPointerException ex) {
@@ -325,11 +346,14 @@ public class MenuGUI extends JFrame{
 					centerPanel.add(error);
 					centerPanel.updateUI();
 				}
+				*/
+				
+				connection.getAll();
 			
 			}
 			
 		});
 		
 	}
-	
 }
+		
