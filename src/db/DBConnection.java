@@ -19,7 +19,7 @@ public class DBConnection {
 		}
 	}
 	
-	public  void searchDB(String name){
+	public ResultSet searchDB(String name){
 		con = dbConnect();
 		
 		//code for inside button click to check against database:
@@ -32,28 +32,17 @@ public class DBConnection {
 			//if you want to select more things from the database, then put ? for the next ones (description=?)
 			//and then use statement.setString(2, "..."); - 2 for the next index of ?'s
 			
-			ResultSet resultSet = statement.executeQuery();
-			int count = 0;
-			while(resultSet.next()){
-				count++;
-			}
-			
-			//display if there are results
-			if(count == 1){
-				JOptionPane.showMessageDialog(null, "1 result");
-			} 
-			else if (count > 1){
-				JOptionPane.showMessageDialog(null, "More than 1 result");
-			} else {
-				JOptionPane.showMessageDialog(null, "No results");
-			}
+			ResultSet results = statement.executeQuery();
 			
 			//close connection to database:
-			resultSet.close();
-			statement.close();
+			//resultSet.close();
+			//statement.close();
+			
+			return results;
 			
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null, ex);
+			return null;
 		}
 	}
 	
@@ -83,20 +72,27 @@ public class DBConnection {
 		}		
 	}
 	
-	public void getAll(){
+	public ResultSet getAll(){
 		con = dbConnect();
-		
-		//code for button click to retreive all recipes in db:
+		ResultSet results = null;
+		ResultSet allRecipes = null;
+	//code for button click to retrieve all recipes in db:
 		try{
 			String query = "select * from recipe";
 			PreparedStatement statement = con.prepareStatement(query);
+			results = statement.executeQuery();
+			
 			JOptionPane.showMessageDialog(null, "All Recipes");
+			allRecipes = results;
 			
 			//close connection
-			statement.close();
+			//statement.close();
 			
 		} catch (Exception ex){
 			JOptionPane.showMessageDialog(null, ex);
 		}
+		
+		return allRecipes;
+		
 	}
 }

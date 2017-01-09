@@ -14,12 +14,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.TableModel;
 
 import db.Conn;
 import db.DBConnection;
+import net.proteanit.sql.DbUtils;
 
 
 public class MenuGUI extends JFrame{
@@ -47,6 +52,7 @@ public class MenuGUI extends JFrame{
 		setTitle("Recipe Book");
 		setSize(800, 600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null); //open in center of screen
 		
 		final Container container = getContentPane();
 		container.setLayout(new BorderLayout());
@@ -123,14 +129,6 @@ public class MenuGUI extends JFrame{
 				//set up labels for new recipe
 				JLabel newRecipe = new JLabel("NEW RECIPE");
 				newRecipe.setFont(new Font("Serif", Font.BOLD, 20));
-				
-				//TODO: Perhaps add photo background:
-				/*
-				westLabel = new JLabel("NEW RECIPE");
-				westLabel.setFont(new Font("Serif", Font.BOLD, 20));
-				westPanel.add(westLabel);
-				westPanel.updateUI();
-				*/
 				
 				JLabel name = new JLabel("Enter name:");
 				nameText = new JTextField();
@@ -257,66 +255,34 @@ public class MenuGUI extends JFrame{
 						centerPanel.removeAll();
 						JLabel recipeSearchResults = new JLabel("Results for: " + searchNameText.getText());
 						centerPanel.add(recipeSearchResults);
+
+						//create scrollable table to populate with search results
+						JTable table = new JTable();
+						JScrollPane scrollPane = new JScrollPane();
+						scrollPane.setBounds(0, 0, 0, 0);
+						scrollPane.setViewportView(table);
 						
-						//search db:
-						connection.searchDB(searchNameText.getText());
-						
-						centerPanel.updateUI(); //update the gui with new results
-						
-						/*
-						 * The ResultSet interface provides getter methods (getBoolean, getLong, and so on) 
-						 * for retrieving column values from the current row. Values can be retrieved using 
-						 * either the index number of the column or the name of the column. In general, using
-						 *  the column index will be more efficient. Columns are numbered from 1. For maximum
-						 *   portability, result set columns within each row should be read in left-to-right 
-						 *   order, and each column should be read only once. 
-						 *  For the getter methods, a JDBC driver attempts to convert the underlying data to
-						 *   the Java type specified in the getter method and returns a suitable Java value.
-						 *    The JDBC specification has a table showing the allowable mappings from SQL types
-						 *     to Java types that can be used by the ResultSet getter methods. 
-						 *     Column names used as input to getter methods are case insensitive. When a getter 
-						 *     method is called with a column name and several columns have the same name, the 
-						 *     value of the first matching column will be returned. The column name option is 
-						 *     designed to be used when column names are used in the SQL query that generated 
-						 *     the result set. For columns that are NOT explicitly named in the query, it is best
-						 *      to use column numbers. If column names are used, the programmer should take care
-						 *       to guarantee that they uniquely refer to the intended columns, which can be 
-						 *       assured with the SQL AS clause. 
-						 */
-						
-						/*
-						//TODO: verify functionality:
-						try {
-							ResultSet results = connection.SearchDB(searchNameText.getText());
-							while(results.next()){
-								String name = results.getString("name");
-								String description = results.getString("description");
-								String ingredients = results.getString("ingridients"); //misspelled in db
-								String instruction = results.getString("instructions");
-								JLabel searchResultName = new JLabel(name);
-								recipeSearchResults.add(searchResultName);
-								centerPanel.add(recipeSearchResults);
-								centerPanel.updateUI();
-							}
-						} catch (ClassNotFoundException | SQLException | NullPointerException ex) {
-							JLabel error = new JLabel("Error retreiving from database");
-							recipeSearchResults.add(error);
-							centerPanel.add(recipeSearchResults);
-							centerPanel.updateUI();
+						//get all resulting recipes from db and populate table
+						ResultSet results = connection.searchDB(searchNameText.getText());
+						if(results!=null){
+						table.setModel(DbUtils.resultSetToTableModel(results));
+						} else {
+							JOptionPane.showMessageDialog(null, "Error: no results from database");
 						}
 						
-						*/
+						centerPanel.add(table);
+						centerPanel.add(scrollPane);
+						
+						centerPanel.updateUI(); //update the gui with new results
 					}
 					
 				});
-				
+						
+					
 				centerPanel.add(searchRecipe);
 				centerPanel.add(searchName);
 				centerPanel.add(searchNameText);
 				centerPanel.add(searchButton);
-				
-				//TODO: add an actionListener to search database for recipe with matching name
-				
 				centerPanel.updateUI();
 				
 			}
@@ -333,7 +299,25 @@ public class MenuGUI extends JFrame{
 				centerPanel.removeAll();
 				JLabel allRecipes = new JLabel("ALL MY RECIPES");
 				allRecipes.setFont(new Font("Serif", Font.BOLD, 20));
+				
+				//scrollable table to hold all recipes
+				JTable table = new JTable();
+				JScrollPane scrollPane = new JScrollPane();
+				scrollPane.setBounds(0, 0, 0, 0);
+				scrollPane.setViewportView(table);
+				
 				centerPanel.add(allRecipes);
+				centerPanel.add(table);
+				centerPanel.add(scrollPane);
+				
+				//get all recipes from db and populate table
+				ResultSet results = connection.getAll();
+				if(results!=null){
+				table.setModel(DbUtils.resultSetToTableModel(results));
+				} else {
+					JOptionPane.showMessageDialog(null, "Error: no results from database");
+				}
+				
 				centerPanel.updateUI();
 				
 				//connect to database to retrieve all recipes
@@ -348,7 +332,9 @@ public class MenuGUI extends JFrame{
 				}
 				*/
 				
-				connection.getAll();
+				
+				
+				
 			
 			}
 			

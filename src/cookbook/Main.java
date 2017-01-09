@@ -8,5 +8,4 @@ public class Main {
 		final MenuGUI menu = new MenuGUI();
 		menu.setVisible(true);
 	}
-
 }

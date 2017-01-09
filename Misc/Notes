@@ -5,12 +5,15 @@ Add jars to project path (in Resources folder).
 can be found at:
 https://bitbucket.org/xerial/sqlite-jdbc/downloads
 
+Also need a jar for populating the All Recipes table:
+https://sourceforge.net/projects/finalangelsanddemons/
+it helps convert a ResultSet to data
+
 Syntax for connecting to db:
 Connection con = DriverManager.getConnection("jdbc:sqlite:DBPath...");
 
 Syntax for SQL insert queries:
 
 INSERT INTO RECIPE (Name,Description,Ingredients,Instructions) VALUES (?,?,?,?);
-
 
 		
